@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.utils import timezone
+import random
+from django.core.mail import send_mail
+
+
 # Create your models here.
 
 
@@ -109,3 +115,35 @@ class Image(ItemBase):
 
 
 
+
+class User(AbstractUser):
+   
+    groups = models.ManyToManyField(
+        Group,
+        related_name='upskill_user_set',  # auth.User bilan to'qnashmasligi uchun
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='upskill_user_permissions',  # auth.User bilan to'qnashmasligi uchun
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
+
+
+def send_verification_code(user):
+    code = str(random.randint(100000, 999999))
+    user.email_code = code
+    user.code_created_at = timezone.now()
+    user.save()
+
+    send_mail(
+        'Tasdiqlash kodi',
+        f'Sizning tasdiqlash kodingiz: {code}\nKod 5 daqiqa amal qiladi.',
+        'noreply@gmail.com',
+        [user.email],
+    )

@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}Email tasdiqlash{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="col-md-6 mx-auto">
+        <form method="post" class="card p-4">
+            {% csrf_token %}
+            <h3 class="text-center">Tasdiqlash kodi</h3>
+
+            {% if error %}
+                <p class="text-danger text-center">{{ error }}</p>
+            {% endif %}
+
+            <input type="text" name="code" class="form-control mt-3" placeholder="6 xonali kod">
+
+            <button class="btn btn-success mt-3 w-100">Tasdiqlash</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'resend' %}">🔁 Kodni qayta yuborish</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

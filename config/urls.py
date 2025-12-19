@@ -19,5 +19,5 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('upskill/',include('upskill.urls'))
+    path('up/',include('upskill.urls')),
 ]
